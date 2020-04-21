@@ -17,21 +17,38 @@
 <p>
   <button (click)="getPhoneNumberCombination()">Generate Phone</button>
 </p>
+
+<div *ngIf=isError>{{errorMessage}} </div>
 <div *ngIf=isServiceCalled>
-<div class="mat-elevation-z8">
-  <mat-table [dataSource]="dataSource" matSort>
+<div class="mat-elevation-z8"  [ngClass]="{'hide':(dataSource!=null && dataSource.data.length==0) }">
+  <mat-table [dataSource]="dataSource" >
+   
+      
   
+   
           <!-- Progress Column -->
           <ng-container matColumnDef="Phone_Numbers">
-           <mat-header-cell class="my-mat-header-cell" *matHeaderCellDef mat-sort-header> Phone Numbers </mat-header-cell>
+           <mat-header-cell class="my-mat-header-cell" *matHeaderCellDef> Phone Numbers </mat-header-cell>
            <mat-cell class="my-mat-cell"  *matCellDef="let row"> {{row}} </mat-cell>
          </ng-container>
      
+         <ng-container matColumnDef="loading">
+          <mat-footer-cell *matFooterCellDef colspan="6">
+            loading data...
+          </mat-footer-cell>
+        </ng-container>
+          <ng-container matColumnDef="noData">
+            <mat-footer-cell *matFooterCellDef colspan="6">
+              No Data
+            </mat-footer-cell>
+         </ng-container>
          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
          <mat-row *matRowDef="let row; columns: displayedColumns;">
          </mat-row>
+         <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':dataSource!=null}"></mat-footer-row>
+         <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(dataSource!=null && dataSource.data.length==0) }"></mat-footer-row>
        </mat-table>
      
-       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+       <mat-paginator  [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
      </div>
 </div>
